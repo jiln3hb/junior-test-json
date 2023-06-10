@@ -59,8 +59,8 @@ public class SearchService {
         SearchOutputCustomers resultByProductCriteria = new SearchOutputCustomers();
         resultByProductCriteria.setCriteria(productCriteria);
 
-        List<CustomerEntity> customersByProductCriteria = dbService.findByProductName(productCriteria.get("productName").toString());
-        resultByProductCriteria.setCustomers(customersByProductCriteria);
+        //List<CustomerEntity> customersByProductCriteria = dbService.findByProductName(productCriteria.get("productName").toString());
+       // resultByProductCriteria.setCustomers(customersByProductCriteria);
 
         return resultByProductCriteria;
     }
