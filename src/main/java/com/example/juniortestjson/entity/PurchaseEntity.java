@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -18,17 +18,19 @@ import java.util.Set;
 public class PurchaseEntity {
 
     @Id
+    @SequenceGenerator(name = "PURCHASE_ID_GEN", sequenceName = "PURCHASE_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PURCHASE_ID_GEN")
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "CUSTOMER")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "CUSTOMER_ID")
     private CustomerEntity customer;
 
-    @ManyToMany
-    @JoinColumn(name = "PRODUCT")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "PRODUCTS_ID")
     private Set<ProductEntity> products;
 
     @Column(name = "PURCHASE_DATE")
-    private LocalDateTime purchaseDate;
+    private LocalDate purchaseDate;
 }

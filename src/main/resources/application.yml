@@ -4,7 +4,7 @@ spring:
     username: jtj
     password: jtjPass
   jpa:
-    generate-ddl: false
+    generate-ddl: true
     hibernate:
       ddl-auto: create
     properties:

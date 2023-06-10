@@ -1,9 +1,6 @@
 package com.example.juniortestjson.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,8 @@ import java.math.BigDecimal;
 public class ProductEntity {
 
     @Id
+    @SequenceGenerator(name = "PRODUCT_ID_GEN", sequenceName = "PRODUCT_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PRODUCT_ID_GEN")
     @Column(name = "ID")
     private Long id;
 
