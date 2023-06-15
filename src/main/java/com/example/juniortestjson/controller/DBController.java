@@ -1,5 +1,6 @@
 package com.example.juniortestjson.controller;
 
+import com.example.juniortestjson.dto.PurchaseEntityDTO;
 import com.example.juniortestjson.entity.CustomerEntity;
 import com.example.juniortestjson.entity.ProductEntity;
 import com.example.juniortestjson.entity.PurchaseEntity;
@@ -33,7 +34,7 @@ public class DBController {
     }
 
     @PostMapping("/addPurchase")
-    void addPurchase(@RequestBody PurchaseEntity purchaseEntity) {
-        dbService.save(purchaseEntity);
+    void addPurchase(@RequestBody PurchaseEntityDTO purchaseEntityDTO) {
+        dbService.save(purchaseEntityDTO);
     }
 }

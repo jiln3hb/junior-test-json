@@ -1,43 +1,35 @@
 package com.example.juniortestjson.deserializer;
 
-import com.example.juniortestjson.exception.BadRequestException;
-import com.example.juniortestjson.models.StatCriterias;
+import com.example.juniortestjson.models.input.StatInput;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import static com.google.gson.JsonParser.parseString;
 
 //нужно ли создавать интерфейс deserializer?
 @Slf4j
 public class StatCriteriasDeserializer {
 
-    public StatCriterias deserialize(String json) {
-        JSONObject input = new JSONObject(json);
+    public StatInput deserialize(String json) {
+        JsonObject input = parseString(json).getAsJsonObject();
 
-        StatCriterias statCriterias = new StatCriterias();
-        statCriterias.setStartDate(getStartDate(input));
-        statCriterias.setEndDate(getEndDate(input));
+        StatInput statInput = new StatInput();
 
-        return statCriterias;
+        statInput.setStartDate(getDate("startDate", input));
+        statInput.setEndDate(getDate("endDate", input));
+
+        return statInput;
     }
 
-    private LocalDate getStartDate(JSONObject input) {
+    private LocalDate getDate(String key, JsonObject input) {
         try {
-            return LocalDate.parse(input.get("startDate").toString(), DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (Exception e) {
-            log.info("startDate is not valid");
-            throw new BadRequestException("startDate is not valid");
-        }
-    }
-
-    private LocalDate getEndDate(JSONObject input) {
-        try {
-            return LocalDate.parse(input.get("endDate").toString(), DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (Exception e) {
-            log.info("endDate is not valid");
-            throw new BadRequestException("endDate is not valid");
+            return LocalDate.parse(input.get(key).getAsString());
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException(key.equals("startDate") ? "Начальная дата невалидна" : "Конечная дата невалидна");
         }
     }
 }

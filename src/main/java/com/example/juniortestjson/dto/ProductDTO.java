@@ -5,13 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class CustomerEntityDTO {
+@AllArgsConstructor
+public class ProductDTO {
 
-    private String firstName;
+    private Long customerId;
 
-    private String lastName;
+    private String name;
+
+    private BigDecimal totalExpenses;
 }

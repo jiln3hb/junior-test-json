@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class CustomerEntityDTO {
+@AllArgsConstructor
+public class PurchaseEntityDTO {
 
-    private String firstName;
+    private Long customerId;
 
-    private String lastName;
+    private List<Long> productsIds;
 }

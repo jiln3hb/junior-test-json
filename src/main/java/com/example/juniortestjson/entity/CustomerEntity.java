@@ -1,5 +1,6 @@
 package com.example.juniortestjson.entity;
 
+import com.example.juniortestjson.dto.CustomerEntityDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@NamedNativeQuery(name = "CustomerEntity.findByLastName", query = "SELECT first_name, last_name FROM customer WHERE last_name = :last_name",
+        resultSetMapping = "Mapping.CustomerEntityDTO")
+@SqlResultSetMapping(name = "Mapping.CustomerEntityDTO", classes = @ConstructorResult(targetClass = CustomerEntityDTO.class,
+        columns = {@ColumnResult(name = "first_name"), @ColumnResult(name = "last_name")}))
 @Entity
 @Table(name = "CUSTOMER")
 public class CustomerEntity {
@@ -29,4 +34,8 @@ public class CustomerEntity {
         this.lastName = lastName;
     }
 
+    @Override
+    public String toString() {
+        return "firstName: " + firstName + ", lastName: " + lastName;
+    }
 }
