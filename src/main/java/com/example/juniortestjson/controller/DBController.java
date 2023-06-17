@@ -3,7 +3,6 @@ package com.example.juniortestjson.controller;
 import com.example.juniortestjson.dto.PurchaseEntityDTO;
 import com.example.juniortestjson.entity.CustomerEntity;
 import com.example.juniortestjson.entity.ProductEntity;
-import com.example.juniortestjson.entity.PurchaseEntity;
 import com.example.juniortestjson.service.DBService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

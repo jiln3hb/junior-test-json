@@ -16,10 +16,6 @@ public class SearchInput {
         criterias = new LinkedList<>();
     }
 
-    public void addCriterias(Criteria criteria) {
-        criterias.add(criteria);
-    }
-
     @Override
     public String toString() {
         return criterias.toString();

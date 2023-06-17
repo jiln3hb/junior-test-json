@@ -1,20 +1,14 @@
 package com.example.juniortestjson.entity;
 
-import com.example.juniortestjson.dto.CustomerEntityDTO;
-import com.example.juniortestjson.dto.ProductDTO;
-import com.google.common.collect.Multiset;
+import com.example.juniortestjson.models.output.stat.StatOutputCustomer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.mapping.Bag;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,13 +30,14 @@ import java.util.Set;
                 "JOIN purchase_products pp ON p.id = pp.purchase_entity_id JOIN product pr ON pp.products_id = pr.id " +
                 "GROUP BY c.id ORDER BY COUNT(pr.id) LIMIT :badCustomers",
         resultSetMapping = "Mapping.CustomerEntityDTO")
-
-@NamedNativeQuery(name = "PurchaseEntity.findStat",
-        query = "SELECT DISTINCT p.customer_id, pr.name, SUM(pr.price) AS total_expenses FROM purchase p JOIN purchase_products pp ON p.id = pp.purchase_entity_id " +
-                "JOIN product pr ON pp.products_id = pr.id WHERE p.purchase_date BETWEEN :startDate AND :endDate GROUP BY p.customer_id, pr.id ORDER BY total_expenses DESC",
-        resultSetMapping = "Mapping.ProductDTO")
-@SqlResultSetMapping(name = "Mapping.ProductDTO", classes = @ConstructorResult(targetClass = ProductDTO.class,
-        columns = {@ColumnResult(name = "customer_id", type = Long.class), @ColumnResult(name = "name", type = String.class),
+@NamedNativeQuery(name = "PurchaseEntity.findStatByStartDateAndEndDate",
+        query = "SELECT CONCAT(c.last_name, ' ', c.first_name) as name, ARRAY_AGG(DISTINCT pr.name) as products, " +
+                "SUM(pr.price) as total_expenses FROM customer c JOIN purchase p ON c.id = p.customer_id JOIN purchase_products pp ON p.id = pp.purchase_entity_id " +
+                "JOIN product pr ON pp.products_id = pr.id " +
+                "WHERE p.purchase_date BETWEEN :startDate AND :endDate GROUP BY c.id",
+        resultSetMapping = "Mapping.StatOutputCustomer")
+@SqlResultSetMapping(name = "Mapping.StatOutputCustomer", classes = @ConstructorResult(targetClass = StatOutputCustomer.class,
+        columns = {@ColumnResult(name = "name", type = String.class), @ColumnResult(name = "products", type = String[].class),
                 @ColumnResult(name = "total_expenses", type = BigDecimal.class)}))
 @Entity
 @Table(name = "PURCHASE")

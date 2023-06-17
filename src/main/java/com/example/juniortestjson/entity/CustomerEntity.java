@@ -2,6 +2,7 @@ package com.example.juniortestjson.entity;
 
 import com.example.juniortestjson.dto.CustomerEntityDTO;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @NamedNativeQuery(name = "CustomerEntity.findByLastName", query = "SELECT first_name, last_name FROM customer WHERE last_name = :last_name",
         resultSetMapping = "Mapping.CustomerEntityDTO")
 @SqlResultSetMapping(name = "Mapping.CustomerEntityDTO", classes = @ConstructorResult(targetClass = CustomerEntityDTO.class,
@@ -28,11 +30,6 @@ public class CustomerEntity {
 
     @Column(name = "LAST_NAME")
     private String lastName;
-
-    public CustomerEntity(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
     @Override
     public String toString() {

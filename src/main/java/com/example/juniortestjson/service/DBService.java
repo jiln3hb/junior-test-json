@@ -1,26 +1,17 @@
 package com.example.juniortestjson.service;
 
 import com.example.juniortestjson.dto.CustomerEntityDTO;
-import com.example.juniortestjson.dto.ProductDTO;
 import com.example.juniortestjson.dto.PurchaseEntityDTO;
 import com.example.juniortestjson.entity.CustomerEntity;
 import com.example.juniortestjson.entity.ProductEntity;
 import com.example.juniortestjson.entity.PurchaseEntity;
 import com.example.juniortestjson.exception.NotFoundException;
 import com.example.juniortestjson.models.criteria.*;
+import com.example.juniortestjson.models.output.stat.StatOutputCustomer;
 import com.example.juniortestjson.repository.CustomerRepo;
 import com.example.juniortestjson.repository.ProductRepo;
 import com.example.juniortestjson.repository.PurchaseRepo;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.SessionFactoryBuilder;
-import org.hibernate.boot.internal.SessionFactoryBuilderImpl;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -91,11 +82,7 @@ public class DBService {
         return null;
     }
 
-    public List<Long> findCustomersWithPurchasesInPeriod(LocalDate startDate, LocalDate endDate) {
-        return purchaseRepo.findCustomerIdsWithPurchasesInPeriod(startDate, endDate);
-    }
-
-    public List<ProductDTO> findStat(LocalDate startDate, LocalDate endDate) {
-        return purchaseRepo.findStat(startDate, endDate);
+    public List<StatOutputCustomer> findStatByStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
+        return purchaseRepo.findStatByStartDateAndEndDate(startDate, endDate);
     }
 }

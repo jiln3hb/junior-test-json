@@ -1,12 +1,8 @@
 package com.example.juniortestjson.repository;
 
 import com.example.juniortestjson.dto.CustomerEntityDTO;
-import com.example.juniortestjson.dto.ProductDTO;
-import com.example.juniortestjson.entity.CustomerEntity;
-import com.example.juniortestjson.entity.ProductEntity;
 import com.example.juniortestjson.entity.PurchaseEntity;
-import jakarta.persistence.SqlResultSetMapping;
-import org.springframework.data.domain.Example;
+import com.example.juniortestjson.models.output.stat.StatOutputCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,7 +23,5 @@ public interface PurchaseRepo extends JpaRepository<PurchaseEntity, Long> {
     List<CustomerEntityDTO> findBadCustomers(@Param("badCustomers") int badCustomers);
 
     @Query(nativeQuery = true)
-    List<Long> findCustomerIdsWithPurchasesInPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
-
-    List<ProductDTO> findStat(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    List<StatOutputCustomer> findStatByStartDateAndEndDate(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

@@ -1,13 +1,14 @@
 package com.example.juniortestjson.deserializer;
 
-import com.example.juniortestjson.models.input.SearchInput;
+import com.example.juniortestjson.exception.BadRequestException;
 import com.example.juniortestjson.models.criteria.*;
-import com.google.gson.*;
-
+import com.example.juniortestjson.models.input.SearchInput;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Set;
@@ -23,18 +24,18 @@ public class SearchCriteriasDeserializer {
 
     static final String PRODUCT_NAME_REGEX = "^[a-zA-Zа-яА-Я ]{1,255}$";
 
-
-    public SearchInput deserialize(String json) throws IOException {
+    public SearchInput deserialize(String json) {
         JsonArray input = parseString(json).getAsJsonObject().getAsJsonArray("criterias");
 
         SearchInput searchInput = new SearchInput();
 
         searchInput.setCriterias(getCriterias(input));
 
+        log.info("search: input json was successfully deserialized");
         return searchInput;
     }
 
-    private LinkedList<Criteria> getCriterias(JsonArray input) throws IOException {
+    private LinkedList<Criteria> getCriterias(JsonArray input) {
         LinkedList<Criteria> criterias = new LinkedList<>();
 
         for (CriteriaTypes type: CriteriaTypes.values()) {
@@ -47,7 +48,7 @@ public class SearchCriteriasDeserializer {
                         case PRODUCT -> criterias.add(getProductCriteria(object));
                         case PRICE -> criterias.add(getPriceCriteria(object));
                         case BAD_CUSTOMERS -> criterias.add(getBadCustomersCriteria(object));
-                        default -> throw new IOException("Критерии невалидны");
+                        default -> throw new BadRequestException("Критерии невалидны");
                     }
                 }
             }
@@ -56,17 +57,17 @@ public class SearchCriteriasDeserializer {
         return criterias;
     }
 
-    private LastNameCriteria getLastNameCriteria(JsonObject object) throws IOException {
+    private LastNameCriteria getLastNameCriteria(JsonObject object) {
         String lastName = object.get("lastName").getAsString();
 
         if (lastName.matches(NAME_REGEX)) {
             return new LastNameCriteria(lastName);
         } else {
-            throw new IOException("Фамилия невалидна");
+            throw new BadRequestException("Фамилия невалидна");
         }
     }
 
-    private ProductCriteria getProductCriteria(JsonObject object) throws IOException {
+    private ProductCriteria getProductCriteria(JsonObject object) {
         String productName = object.get("productName").getAsString();
         String minTimes = object.get("minTimes").getAsString();
 
@@ -74,14 +75,14 @@ public class SearchCriteriasDeserializer {
             if (isParsable(minTimes)) {
                 return new ProductCriteria(productName, Integer.parseInt(minTimes));
             } else {
-                throw new IOException("Количество раз, которое покупатель покупал указанный товар, невалидно");
+                throw new BadRequestException("Количество раз, которое покупатель покупал указанный товар, невалидно");
             }
         } else {
-            throw new IOException("Название товара невалидно");
+            throw new BadRequestException("Название товара невалидно");
         }
     }
 
-    private PriceCriteria getPriceCriteria(JsonObject object) throws IOException {
+    private PriceCriteria getPriceCriteria(JsonObject object) {
         String minExpenses = object.get("minExpenses").getAsString();
         String maxExpenses = object.get("maxExpenses").getAsString();
 
@@ -89,20 +90,20 @@ public class SearchCriteriasDeserializer {
             if (isParsable(maxExpenses)) {
                 return new PriceCriteria(Integer.parseInt(minExpenses), Integer.parseInt(maxExpenses));
             } else {
-                throw new IOException("Минимальная стоимость всех покупок невалидна");
+                throw new BadRequestException("Минимальная стоимость всех покупок невалидна");
             }
         } else {
-            throw new IOException("Максимальная стоимость всех покупок невалидна");
+            throw new BadRequestException("Максимальная стоимость всех покупок невалидна");
         }
     }
 
-    private BadCustomersCriteria getBadCustomersCriteria(JsonObject object) throws IOException {
+    private BadCustomersCriteria getBadCustomersCriteria(JsonObject object) {
         String badCustomers = object.get("badCustomers").getAsString();
 
         if (isParsable(badCustomers)) {
             return new BadCustomersCriteria(Integer.parseInt(badCustomers));
         } else {
-            throw new IOException("Число пассивных покупателей невалидно");
+            throw new BadRequestException("Число пассивных покупателей невалидно");
         }
     }
 

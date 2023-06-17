@@ -3,7 +3,6 @@ package com.example.juniortestjson.models.output.search;
 import com.example.juniortestjson.models.output.Output;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 @Getter

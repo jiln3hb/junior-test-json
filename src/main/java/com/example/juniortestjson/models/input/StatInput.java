@@ -15,6 +15,8 @@ public class StatInput {
 
     private LocalDate endDate;
 
+    private int totalDays;
+
     @Override
     public String toString() {
         return "startDate: " + startDate + " endDate: " + endDate;

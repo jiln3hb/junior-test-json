@@ -1,9 +1,9 @@
 package com.example.juniortestjson.service;
 
 import com.example.juniortestjson.deserializer.SearchCriteriasDeserializer;
-import com.example.juniortestjson.dto.CustomerEntityDTO;
+import com.example.juniortestjson.exception.BadRequestException;
+import com.example.juniortestjson.models.criteria.Criteria;
 import com.example.juniortestjson.models.input.SearchInput;
-import com.example.juniortestjson.models.criteria.*;
 import com.example.juniortestjson.models.output.ErrorOutput;
 import com.example.juniortestjson.models.output.Output;
 import com.example.juniortestjson.models.output.search.SearchOutput;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -35,18 +33,20 @@ public class SearchService {
 
         try {
             SearchInput searchInput = deserializer.deserialize(jsonCriterias);
-            log.info("(search) input json was successfully deserialized");
 
             SearchOutput searchOutput = new SearchOutput();
 
             LinkedList<Criteria> criterias = searchInput.getCriterias();
+            log.info("searching in database by criterias: {}", criterias.toString());
 
             for (Criteria criteria : criterias) {
                 searchOutput.addResult(searchByCriteria(criteria));
             }
 
+            log.info("search was successfully performed");
             return searchOutput;
-        } catch (IOException e) {
+        } catch (BadRequestException e) {
+            log.info("error: " + e.getMessage());
             return new ErrorOutput(e.getMessage());
         }
     }

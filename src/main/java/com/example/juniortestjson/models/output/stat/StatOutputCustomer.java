@@ -1,28 +1,20 @@
 package com.example.juniortestjson.models.output.stat;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
+@AllArgsConstructor
+
 public class StatOutputCustomer {
 
     private String name;
 
-    private LinkedList<Map<String, Object>> purchases;
+    private String[] products;
 
-    private int totalExpenses;
-
-    public StatOutputCustomer() {
-        purchases = new LinkedList<>();
-    }
-
-    public void addPurchase(Map<String, Object> purchase) {
-        purchases.add(purchase);
-    }
+    private BigDecimal totalExpenses;
 }
